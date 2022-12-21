@@ -14,8 +14,8 @@
           <td><img :src="producto.link" /></td>
           <td>{{ producto.nombre }}</td>
           <td>{{ producto.precio }}</td>
-          <td><input type="text" name="" id="" v-model="cantidad" /></td>
-          <td>{{ calcularSubTotal(producto.precio) }}</td>
+          <td><input type="text" name="" id="" v-model="cantidad[index]" /></td>
+          <td>{{ subPrecio(index) }}{{ subProducto[index] }}</td>
           <td><button @click="eliminarProducto(index)">X</button></td>
         </tr>
         <tr>
@@ -24,15 +24,16 @@
           <td></td>
           <td></td>
           <td>SUB TOTAL:</td>
-          <td>{{ subTotal }}</td>
+          <td>{{ calcularSubTotal() }}{{ subtotal }}</td>
         </tr>
+
         <tr>
           <td></td>
           <td></td>
           <td></td>
           <td></td>
-          <td>IGV:</td>
-          <td></td>
+          <td>IVA:</td>
+          <td>{{ calcularIva() }}{{ iva }}</td>
         </tr>
         <tr>
           <td></td>
@@ -40,7 +41,7 @@
           <td></td>
           <td></td>
           <td>TOTAL:</td>
-          <td></td>
+          <td>{{ calcularTotal() }}{{ total }}</td>
         </tr>
         <tr>
           <td></td>
@@ -52,24 +53,25 @@
         </tr>
       </tbody>
     </table>
-    <div>
-      <input type="text" v-model="nuevoProducto" />
-      <button @click="addTarea">añadir tarea</button>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "ShopVue",
-  props: {
-    pro: Array,
-  },
   data() {
     return {
-      cantidad: 1,
+      cantidad: ["", "", ""],
       subTotal: 0,
+      iva: 0,
+      total: 0,
+      subProducto: [0, 0, 0],
       productos: [
+        {
+          link: "https://cdn.shopify.com/s/files/1/0604/8373/1606/products/IMG-104966_1445x.jpg?v=1658325800",
+          nombre: "Apple",
+          precio: 4000,
+        },
         {
           link: "https://cdn.shopify.com/s/files/1/0604/8373/1606/products/IMG-104966_1445x.jpg?v=1658325800",
           nombre: "Apple",
@@ -79,16 +81,30 @@ export default {
     };
   },
   methods: {
-    addProduct() {},
-    eliminarProducto(index) {
-      // console.log("ELIMINAR TAREA: ", index + 1);
-      this.productos.splice(index, 1);
-      // splice() El método splice() cambia el contenido de un array
-      // eliminando elementos existentes y/o agregando nuevos elementos.
+    subtotal(index) {
+      if (this.cantidad[index] != "") {
+        this.subProducto[index] =
+          parseInt(this.cantidad[index]) *
+          parseInt(this.productos[index].precio);
+      } else {
+        this.subProducto[index] = 0;
+      }
     },
-    calcularSubTotal(index) {
-      this.subTotal = this.cantidad * index;
-      return this.cantidad * index;
+    calcularIva() {
+      this.iva = this.subtot * 0.19;
+    },
+    calcularSubTotal() {
+      let sumar = 0;
+      for (var i = 0; i < this.subProducto.length; i++) {
+        sumar = sumar + this.subProducto[i];
+      }
+      this.subtot = sumar;
+    },
+    calculoTotal() {
+      this.total = this.subtot + this.iva;
+    },
+    eliminarProducto(index) {
+      return this.productos.splice(index, 1);
     },
   },
 };

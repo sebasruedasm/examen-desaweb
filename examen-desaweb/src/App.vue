@@ -12,7 +12,7 @@
       <span>Correo: </span>
       <input type="text" name="" id="" placeholder="Ingresa tu correo" />
     </div>
-    <ShopVue></ShopVue>
+    <ShopVue />
   </div>
 </template>
 
